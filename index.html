@@ -1,1 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TennisTracker Pro</title>
 
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+min-height:100vh;
+padding:20px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+font-size:3rem;
+color:#22c55e;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 0 15px rgba(0,0,0,.3);
+}
+
+input,button{
+padding:10px;
+border:none;
+border-radius:8px;
+margin:5px;
+}
+
+input{
+width:200px;
+}
+
+button{
+background:#22c55e;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#16a34a;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.stat{
+background:#0f172a;
+padding:20px;
+border-radius:12px;
+text-align:center;
+}
+
+.stat h2{
+font-size:2rem;
+color:#22c55e;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #334155;
+text-align:left;
+}
+
+tr:hover{
+background:#334155;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🎾 TennisTracker Pro</h1>
+
+<div class="card">
+<h2>Add Match</h2>
+
+<input id="player" placeholder="Player Name">
+<input id="opponent" placeholder="Opponent">
+<input id="score" placeholder="Score">
+<select id="result">
+<option>Win</option>
+<option>Loss</option>
+</select>
+
+<button onclick="addMatch()">Add Match</button>
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<p>Total Matches</p>
+<h2 id="matches">0</h2>
+</div>
+
+<div class="stat">
+<p>Wins</p>
+<h2 id="wins">0</h2>
+</div>
+
+<div class="stat">
+<p>Losses</p>
+<h2 id="losses">0</h2>
+</div>
+
+<div class="stat">
+<p>Win Rate</p>
+<h2 id="rate">0%</h2>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Match History</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Opponent</th>
+<th>Score</th>
+<th>Result</th>
+<th>Delete</th>
+</tr>
+</thead>
+<tbody id="history"></tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+let matches = JSON.parse(localStorage.getItem("tennisMatches")) || [];
+
+function save(){
+localStorage.setItem("tennisMatches",JSON.stringify
