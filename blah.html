@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101114">
+<title>Lootly — Game mods, made better</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root{
+  --bg:#101114;
+  --panel:#17181d;
+  --panel2:#1d1e24;
+  --line:#2b2c33;
+  --muted:#92939f;
+  --text:#f4f4f6;
+  --lime:#c8f169;
+  --purple:#a792ff;
+  --radius:16px;
+  --content:1380px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;color:inherit}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.hidden{display:none!important}
+.shell{min-height:100vh}
+.topbar{
+  height:72px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  gap:40px;
+  padding:0 max(calc((100vw - var(--content))/2),32px);
+  position:sticky;
+  top:0;
+  background:rgba(16,17,20,.94);
+  backdrop-filter:blur(18px);
+  z-index:20;
+}
+.logo{
+  font:700 24px 'Space Grotesk';
+  letter-spacing:-1.3px;
+  white-space:nowrap;
+}
+.logo span{color:var(--lime)}
+.navlinks{
+  display:flex;
+  align-items:center;
+  gap:26px;
+  color:#b9bac2;
+  font-weight:600;
+}
+.navlinks a:hover,.navlinks a.active{color:var(--text)}
+.searchtop{position:relative;margin-left:auto;width:min(320px,30vw)}
+.searchtop input{
+  width:100%;
+  height:40px;
+  border-radius:10px;
+  background:#1c1d22;
+  border:1px solid var(--line);
+  padding:0 40px;
+  color:var(--text);
+  outline:none;
+}
+.searchtop input:focus{border-color:#62636b}
+.searchtop span{
+  position:absolute;
+  left:13px;
+  top:10px;
+  color:var(--muted);
+}
+.top-actions{display:flex;align-items:center;gap:12px}
+.avatar{
+  height:36px;
+  width:36px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--lime);
+  color:#171a10;
+  font-weight:800;
+}
+.btn{
+  border:0;
+  border-radius:9px;
+  padding:11px 16px;
+  font-weight:700;
+  transition:.18s;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.07)}
+.btn-primary{background:var(--lime);color:#151811}
+.btn-soft{background:#24252c;border:1px solid #34353d}
+.btn-quiet{background:transparent;color:#bec0c8;padding:9px 11px}
+.btn-danger{background:#49272c;color:#ff9eaa}
+.mobile-menu{display:none}
+.container{
+  max-width:var(--content);
+  margin:auto;
+  padding:0 32px;
+}
+.hero{padding:42px 0 34px}
+.hero-banner{
+  min-height:352px;
+  border-radius:22px;
+  position:relative;
+  overflow:hidden;
+  padding:54px 58px;
+  display:flex;
+  align-items:center;
+  background:#252439 url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1800&q=85') center 48%/cover;
+}
+.hero-banner:before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,rgba(13,14,18,.97) 0%,rgba(13,14,18,.82) 43%,rgba(13,14,18,.05) 100%),linear-gradient(0deg,rgba(13,14,18,.28),transparent 60%);
+}
+.hero-copy{position:relative;max-width:570px}
+.eyebrow{
+  color:var(--lime);
+  font-weight:800;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  font-size:11px;
+}
+.hero h1{
+  font:700 clamp(38px,5vw,62px)/1.02 'Space Grotesk';
+  letter-spacing:-2.7px;
+  margin:17px 0;
+}
+.hero h1 em{color:var(--lime);font-style:normal}
+.hero p{
+  color:#c1c1c8;
+  font-size:15px;
+  line-height:1.7;
+  max-width:470px;
+  margin:0 0 25px;
+}
+.hero-buttons{display:flex;gap:11px}
+.hero-stat{
+  position:absolute;
+  right:36px;
+  bottom:30px;
+  background:rgba(20,21,24,.75);
+  border:1px solid #ffffff27;
+  border-radius:12px;
+  padding:15px 19px;
+  backdrop-filter:blur(12px);
+}
+.hero-stat b{font:700 21px 'Space Grotesk';display:block}
+.hero-stat small{color:#b4b5bc}
+.section{padding:24px 0}
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:17px;
+}
+.section-title{
+  font:700 22px 'Space Grotesk';
+  letter-spacing:-.6px;
+  margin:0;
+}
+.section-sub{
+  color:var(--muted);
+  margin:5px 0 0;
+  font-size:13px;
+}
+.link{color:var(--lime);font-weight:700;cursor:pointer}
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:12px;
+}
+.category-card{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:13px;
+  padding:17px 12px;
+  transition:.2s;
+  cursor:pointer;
+  text-align:center;
+}
+.category-card:hover,.category-card.selected{
+  background:#22251d;
+  border-color:#637340;
+  transform:translateY(-2px);
+}
+.category-card .cat-icon{
+  font-size:22px;
+  margin-bottom:9px;
+}
+.category-card b{display:block;font-size:12px}
+.category-card small{color:var(--muted);font-size:11px}
+.project-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+}
+.project-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .2s,border .2s;
+}
+.project-card:hover{
+  transform:translateY(-4px);
+  border-color:#53545d;
+}
+.card-cover{
+  height:144px;
+  position:relative;
+  background:#292b34 center/cover;
+}
+.card-cover:after{
+  content:'';
+  position:absolute;
+  inset:45% 0 0;
+  background:linear-gradient(transparent,rgba(0,0,0,.4));
+}
+.badge{
+  position:absolute;
+  top:11px;
+  left:11px;
+  z-index:1;
+  border-radius:6px;
+  padding:5px 8px;
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  background:var(--lime);
+  color:#171a10;
+}
+.badge.purple{background:var(--purple);color:#201b32}
+.badge.dark{background:#1b1b20dc;color:#eee}
+.card-content{padding:14px}
+.card-title-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.project-icon{
+  height:38px;
+  width:38px;
+  border-radius:10px;
+  object-fit:cover;
+  background:#2c2d35;
+  flex-shrink:0;
+}
+.project-name{
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.creator{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+}
+.card-desc{
+  color:#b0b1ba;
+  line-height:1.5;
+  font-size:12px;
+  height:36px;
+  overflow:hidden;
+  margin:12px 0;
+}
+.card-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-top:1px solid #2a2b31;
+  padding-top:11px;
+  color:#a8a9b0;
+  font-size:11px;
+}
+.stars{color:#ffd16b}
+.tag-row{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.tag{
+  border:1px solid #34353d;
+  color:#bbbcc4;
+  border-radius:5px;
+  padding:3px 6px;
+  font-size:10px;
+}
+.creator-strip{
+  display:grid;
+  grid-template-columns:1.2fr 2fr;
+  gap:24px;
+  align-items:center;
+  background:linear-gradient(115deg,#20221c,#191a1f);
+  border:1px solid #34372d;
+  border-radius:16px;
+  padding:26px;
+}
+.creator-profile{
+  display:flex;
+  gap:16px;
+  align-items:center;
+}
+.creator-avatar{
+  height:62px;
+  width:62px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#383943;
+}
+.creator-profile h3{
+  margin:0 0 5px;
+  font:700 18px 'Space Grotesk';
+}
+.creator-profile p{
+  color:var(--muted);
+  margin:0;
+  font-size:12px;
+}
+.creator-projects{
+  display:flex;
+  gap:12px;
+}
+.mini-project{
+  min-width:0;
+  flex:1;
+  background:#24252b;
+  border-radius:10px;
+  padding:10px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  cursor:pointer;
+}
+.mini-project img{
+  width:34px;
+  height:34px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.mini-project b{
+  font-size:11px;
+  display:block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.mini-project small{color:var(--muted);font-size:10px}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+.stat{
+  padding:22px;
+  border-right:1px solid var(--line);
+}
+.stat:last-child{border:0}
+.stat b{
+  font:700 25px 'Space Grotesk';
+  display:block;
+}
+.stat span{color:var(--muted);font-size:12px}
+.footer{
+  border-top:1px solid var(--line);
+  margin-top:50px;
+  padding:26px 0;
+  color:var(--muted);
+  font-size:12px;
+}
+.browse-layout{
+  display:grid;
+  grid-template-columns:220px minmax(0,1fr);
+  gap:26px;
+  padding-top:34px;
+}
+.filters{
+  background:var(--panel);
+  height:max-content;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:17px;
+  position:sticky;
+  top:90px;
+}
+.filter-head{
+  display:flex;
+  justify-content:space-between;
+  font-weight:800;
+  margin-bottom:19px;
+}
+.filter-group{
+  border-top:1px solid var(--line);
+  padding:16px 0 4px;
+}
+.filter-group h4{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  color:#a7a8b2;
+  margin:0 0 12px;
+}
+.filter-item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:10px 0;
+  color:#c5c6cd;
+  font-size:12px;
+  cursor:pointer;
+}
+.filter-item input{accent-color:var(--lime)}
+.sort-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:17px 0 20px;
+}
+.sort-row select,.form-control{
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#1a1b20;
+  color:var(--text);
+  padding:10px 12px;
+  outline:none;
+}
+.sort-row select{margin-left:auto}
+.result-count{color:var(--muted);font-size:12px}
+.detail-wrap{padding:28px 0}
+.back-link{
+  color:var(--muted);
+  font-weight:600;
+  display:inline-block;
+  margin-bottom:18px;
+  cursor:pointer;
+}
+.detail-banner{
+  height:260px;
+  border-radius:18px;
+  background:center/cover;
+  position:relative;
+  overflow:hidden;
+}
+.detail-banner:after{
+  content:'';
+  position:absolute;
+  inset:30% 0 0;
+  background:linear-gradient(transparent,#111216);
+}
+.detail-main{
+  display:flex;
+  align-items:flex-end;
+  gap:17px;
+  margin:-50px 24px 24px;
+  position:relative;
+  z-index:1;
+}
+.detail-main .project-icon{
+  width:92px;
+  height:92px;
+  border-radius:20px;
+  border:4px solid var(--bg);
+}
+.detail-title{
+  font:700 30px 'Space Grotesk';
+  margin:0 0 6px;
+}
+.detail-byline{color:#c4c5cb}
+.detail-actions{
+  margin-left:auto;
+  display:flex;
+  gap:9px;
+}
+.detail-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 300px;
+  gap:24px;
+}
+.detail-panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:16px;
+}
+.detail-panel h3{
+  font:700 17px 'Space Grotesk';
+  margin:0 0 14px;
+}
+.detail-copy{
+  color:#c2c3ca;
+  line-height:1.8;
+}
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+.gallery img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+  border-radius:9px;
+  cursor:zoom-in;
+}
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+  color:#b8b9c1;
+  font-size:12px;
+}
+.info-row:last-child{border:0}
+.version-box{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#202127;
+  border-radius:9px;
+  padding:12px;
+  margin:8px 0;
+}
+.version-box b{font-size:12px}
+.version-box small{
+  display:block;
+  color:var(--muted);
+  margin-top:4px;
+}
+.comment{
+  border-top:1px solid var(--line);
+  padding:14px 0;
+}
+.comment b{font-size:12px}
+.comment p{
+  color:#b8b9c1;
+  font-size:12px;
+  margin:7px 0 0;
+  line-height:1.6;
+}
+.comment-form{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+.comment-form input{flex:1}
+.dashboard{padding:34px 0}
+.dash-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+.dash-head h1{
+  font:700 30px 'Space Grotesk';
+  margin:0;
+}
+.dash-tabs{
+  display:flex;
+  gap:7px;
+  margin-bottom:20px;
+  border-bottom:1px solid var(--line);
+}
+.dash-tab{
+  border:0;
+  background:none;
+  color:var(--muted);
+  padding:12px 15px;
+  border-bottom:2px solid transparent;
+}
+.dash-tab.active{
+  color:var(--lime);
+  border-color:var(--lime);
+}
+.dash-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.dash-table th,.dash-table td{
+  text-align:left;
+  padding:13px 10px;
+  border-bottom:1px solid var(--line);
+  font-size:12px;
+}
+.dash-table th{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+}
+.dash-project{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.dash-project img{
+  width:38px;
+  height:38px;
+  border-radius:8px;
+  object-fit:cover;
+}
+.table-actions{display:flex;gap:6px}
+.icon-btn{
+  background:#26272e;
+  border:1px solid #363740;
+  border-radius:7px;
+  padding:6px 9px;
+}
+.upload-zone{
+  border:1px dashed #55565f;
+  background:#1c1d22;
+  border-radius:12px;
+  padding:22px;
+  text-align:center;
+  cursor:pointer;
+  color:#bbb;
+}
+.upload-zone input{display:none}
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:#000a;
+  z-index:50;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+.modal{
+  width:min(670px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#191a1f;
+  border:1px solid #393a43;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 24px 90px #0009;
+}
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+.modal-head h2{
+  font:700 21px 'Space Grotesk';
+  margin:0;
+}
+.close-btn{
+  border:0;
+  background:#292a31;
+  border-radius:8px;
+  padding:8px 11px;
+}
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.field.full{grid-column:1/-1}
+.field label{
+  font-size:11px;
+  color:#b4b5bd;
+  font-weight:700;
+}
+.form-control{width:100%}
+textarea.form-control{
+  min-height:95px;
+  resize:vertical;
+}
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:18px;
+}
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--muted);
+}
+.empty-state h3{color:var(--text)}
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  background:#25272d;
+  border:1px solid #3b3d43;
+  padding:13px 18px;
+  border-radius:10px;
+  z-index:80;
+  box-shadow:0 10px 35px #0007;
+  animation:slide .25s;
+}
+@keyframes slide{
+  from{transform:translateY(12px);opacity:0}
+  to{transform:none;opacity:1}
+}
+@media(max-width:1000px){
+  .project-grid{grid-template-columns:repeat(3,1fr)}
+  .category-grid{grid-template-columns:repeat(4,1fr)}
+  .navlinks{gap:15px}
+  .topbar{gap:23px}
+  .detail-layout{grid-template-columns:1fr 250px}
+}
+@media(max-width:720px){
+  .topbar{
+    height:62px;
+    padding:0 16px;
+    gap:15px;
+  }
+  .navlinks{
+    display:none;
+    position:absolute;
+    top:61px;
+    left:0;right:0;
+    padding:16px;
+    background:#17181d;
+    border-bottom:1px solid var(--line);
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .navlinks.open{display:flex}
+  .mobile-menu{
+    display:block;
+    border:0;
+    background:none;
+    font-size:20px;
+  }
+  .searchtop{width:auto;flex:1}
+  .searchtop input{height:36px;padding-left:34px}
+  .top-actions .btn{display:none}
+  .container{padding:0 16px}
+  .hero{padding:20px 0}
+  .hero-banner{
+    min-height:400px;
+    padding:30px 24px;
+    align-items:flex-start;
+  }
+  .hero-banner:before{
+    background:linear-gradient(90deg,rgba(13,14,18,.93),rgba(13,14,18,.36)),linear-gradient(0deg,rgba(13,14,18,.6),transparent);
+  }
+  .hero-stat{right:18px;bottom:18px}
+  .project-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card-cover{height:115px}
+  .card-content{padding:11px}
+  .category-grid{grid-template-columns:repeat(4,1fr);gap:7px}
+  .category-card{padding:12px 4px}
+  .category-card b{font-size:10px}
+  .creator-strip{grid-template-columns:1fr}
+  .creator-projects{overflow:auto}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .browse-layout{
+    grid-template-columns:1fr;
+    padding-top:20px;
+  }
+  .filters{
+    position:static;
+  }
+  .filters .filter-contents{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:0 12px;
+  }
+  .filter-head{margin-bottom:8px}
+  .detail-banner{height:190px}
+  .detail-main{
+    margin:-40px 10px 20px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .detail-main .project-icon{
+    width:72px;
+    height:72px;
+  }
+  .detail-title{font-size:22px}
+  .detail-actions{
+    margin:4px 0 0;
+    width:100%;
+  }
+  .detail-layout{grid-template-columns:1fr}
+  .gallery img{height:105px}
+  .dashboard{padding-top:22px}
+  .dash-head h1{font-size:24px}
+  .dash-table th:nth-child(3),.dash-table td:nth-child(3),.dash-table th:nth-child(4),.dash-table td:nth-child(4){display:none}
+  .form-grid{grid-template-columns:1fr}
+  .field.full{grid-column:auto}
+}
+@media(max-width:420px){
+  .searchtop{display:none}
+  .project-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:38px}
+  .hero-banner{min-height:380px}
+  .stats .stat{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+    <a class="logo" href="#" data-route="home">lootly<span>.</span></a>
+    <nav class="navlinks" id="navlinks">
+      <a href="#" data-route="home" class="active">Discover</a>
+      <a href="#" data-route="browse">Browse projects</a>
+      <a href="#" data-route="dashboard">For creators</a>
+    </nav>
+
+    <div class="searchtop">
+      <span>⌕</span>
+      <input id="globalSearch" type="search" placeholder="Search mods, maps, creators..." aria-label="Search projects">
+    </div>
+
+    <div class="top-actions">
+      <button class="btn btn-soft" data-route="dashboard">＋ Create project</button>
+      <div class="avatar" title="Your creator profile">Y</div>
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    <div class="container" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <span class="logo">lootly<span>.</span></span>
+      <span>Made for the worlds you build. Independent creators, infinite ways to play.</span>
+      <span>© 2025 Lootly Community</span>
+    </div>
+  </footer>
+</div>
+
+<div id="overlay"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const KEY = 'lootly-projects-v1';
+  const COMMENTS = 'lootly-comments-v1';
+
+  const categories = [
+    'Mods','Add-ons','Resource Packs','Texture Packs','Maps','Plugins','Tools','Utilities'
+  ];
+
+  const catIcons = {
+    'Mods':'⚙️',
+    'Add-ons':'🧩',
+    'Resource Packs':'🌿',
+    'Texture Packs':'🎨',
+    'Maps':'🗺️',
+    'Plugins':'🔌',
+    'Tools':'🛠️',
+    'Utilities':'✨'
+  };
+
+  const img = (id, w = 900) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
+
+  const seed = [
+    {
+      id:'luminous-shaders',
+      name:'Luminous Shaders',
+      creator:'pixelmancer',
+      category:'Resource Packs',
+      description:'Bring your world to life with soft cinematic lighting, vivid skies, and reflective water. Carefully tuned for a smooth, beautiful experience.',
+      tags:['Visuals','Shaders','Performance'],
+      downloads:284600,
+      rating:4.9,
+      version:'1.21.4',
+      updated:'2 hours ago',
+      featured:true,
+      trending:true,
+      banner:img('photo-1519608487953-e999c86e7455'),
+      icon:img('photo-1534796636912-3b95b3ab5986',180),
+      screens:[img('photo-1519608487953-e999c86e7455',700), img('photo-1500530855697-b586d89ba3ee',700), img('photo-1470770841072-f978cf4d019e',700)],
+      changelog:'• Updated support for 1.21.4\n• Improved volumetric lighting\n• Added four new sky presets'
+    },
+    {
+      id:'wildfrontier',
+      name:'Wild Frontier',
+      creator:'FernAndFable',
+      category:'Mods',
+      description:'A rich exploration overhaul with new biomes, wildlife, and secrets around every corner. Your next great adventure starts here.',
+      tags:['Adventure','World Gen','Mobs'],
+      downloads:196300,
+      rating:4.8,
+      version:'1.21.3',
+      updated:'Yesterday',
+      featured:true,
+      trending:true,
+      banner:img('photo-1472396961693-142e6e269027'),
+      icon:img('photo-1511497584788-876760111969',180),
+      screens:[img('photo-1472396961693-142e6e269027',700), img('photo-1448375240586-882707db888b',700), img('photo-1470770841072-f978cf4d019e',700)],
+      changelog:'• Added the misty highlands biome\n• 12 new ambient creatures\n• Fixed rare world generation crash'
+    },
+    {
+      id:'emberfall',
+      name:'Emberfall',
+      creator:'NovaForge',
+      category:'Maps',
+      description:'A handcrafted survival adventure across a volcanic archipelago. Explore, build, and uncover the forgotten story beneath the ash.',
+      tags:['Survival','Adventure','Map'],
+      downloads:152800,
+      rating:4.9,
+      version:'1.20.6',
+      updated:'3 days ago',
+      trending:true,
+      banner:img('photo-1462331940025-496dfbfc7564'),
+      icon:img('photo-1500534623283-312aade485b7',180),
+      screens:[img('photo-1462331940025-496dfbfc7564',700), img('photo-1518837695005-2083093ee35b',700), img('photo-1519681393784-d120267933ba',700)],
+      changelog:'• Chapter 3 is now available\n• Added two new islands\n• Refreshed quest journal'
+    },
+    {
+      id:'tiny-tweaks',
+      name:'Tiny Tweaks',
+      creator:'mossybyte',
+      category:'Utilities',
+      description:'A lightweight collection of thoughtful quality-of-life improvements. Customize only what you want and keep the game feeling like yours.',
+      tags:['QoL','Configurable','Lightweight'],
+      downloads:98700,
+      rating:4.7,
+      version:'1.21.4',
+      updated:'4 hours ago',
+      banner:img('photo-1518709268805-4e9042af9f23'),
+      icon:img('photo-1518791841217-8f162f1e1131',180),
+      screens:[img('photo-1518709268805-4e9042af9f23',700), img('photo-1518770660439-4636190af475',700), img('photo-1498050108023-c5249f4df085',700)],
+      changelog:'• Added configurable inventory sorting\n• Improved tooltip layout'
+    },
+    {
+      id:'verdant-valley',
+      name:'Verdant Valley',
+      creator:'FernAndFable',
+      category:'Maps',
+      description:'A peaceful valley built for builders and explorers, with winding rivers, ancient ruins, and room to make it your own.',
+      tags:['Building','Fantasy','World'],
+      downloads:77300,
+      rating:4.8,
+      version:'1.21.2',
+      updated:'1 week ago',
+      banner:img('photo-1441974231531-c6227db76b6e'),
+      icon:img('photo-1448375240586-882707db888b',180),
+      screens:[img('photo-1441974231531-c6227db76b6e',700), img('photo-1448375240586-882707db888b',700), img('photo-1500530855697-b586d89ba3ee',700)],
+      changelog:'• Added river delta build\n• Updated terrain to 1.21'
+    },
+    {
+      id:'arcane-ui',
+      name:'Arcane UI',
+      creator:'pixelmancer',
+      category:'Texture Packs',
+      description:'An elegant enchanted interface that makes every menu feel like part of your fantasy world. Crisp, clear, and easy on the eyes.',
+      tags:['UI','Fantasy','16x'],
+      downloads:64800,
+      rating:4.6,
+      version:'1.21.4',
+      updated:'2 days ago',
+      banner:img('photo-1518709268805-4e9042af9f23'),
+      icon:img('photo-1519608487953-e999c86e7455',180),
+      screens:[img('photo-1518709268805-4e9042af9f23',700), img('photo-1519608487953-e999c86e7455',700), img('photo-1518837695005-2083093ee35b',700)],
+      changelog:'• Updated inventory icons\n• Added high contrast mode'
+    },
+    {
+      id:'craftlink',
+      name:'CraftLink',
+      creator:'NovaForge',
+      category:'Plugins',
+      description:'Connect your community with powerful server tools, clean moderation controls, and a simple setup that just works.',
+      tags:['Server','Admin','Community'],
+      downloads:52300,
+      rating:4.5,
+      version:'1.20–1.21',
+      updated:'5 days ago',
+      banner:img('photo-1519389950473-47ba0277781c'),
+      icon:img('photo-1498050108023-c5249f4df085',180),
+      screens:[img('photo-1519389950473-47ba0277781c',700), img('photo-1498050108023-c5249f4df085',700), img('photo-1518770660439-4636190af475',700)],
+      changelog:'• Added server dashboard\n• Improved permission handling'
+    },
+    {
+      id:'skybound',
+      name:'Skybound Isles',
+      creator:'mossybyte',
+      category:'Add-ons',
+      description:'Take to the skies in a collection of floating islands packed with new challenges, clever builds, and unexpected discoveries.',
+      tags:['Adventure','Floating Islands','Survival'],
+      downloads:46800,
+      rating:4.7,
+      version:'1.21.1',
+      updated:'1 week ago',
+      banner:img('photo-1464822759023-fed622ff2c3b'),
+      icon:img('photo-1464822759023-fed622ff2c3b',180),
+      screens:[img('photo-1464822759023-fed622ff2c3b',700), img('photo-1470770841072-f978cf4d019e',700), img('photo-1519681393784-d120267933ba',700)],
+      changelog:'• New island chain discovered\n• Added skyship travel'
+    }
+  ];
+
+  let projects = loadProjects();
+
+  let state = {
+    route: 'home',
+    category: 'All',
+    query: '',
+    sort: 'popular',
+    tag: '',
+    detail: null,
+    dashTab: 'projects'
+  };
+
+  const app = document.getElementById('app');
+  const overlay = document.getElementById('overlay');
+
+  function loadProjects() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY));
+      return Array.isArray(saved) && saved.length ? saved : seed.map(x => ({ ...x }));
+    } catch (e) {
+      return seed.map(x => ({ ...x }));
+    }
+  }
+
+  function persist() {
+    localStorage.setItem(KEY, JSON.stringify(projects));
+  }
+
+  function safe(s = '') {
+    return String(s).replace(/[&<>\"']/g, c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    })[c]);
+  }
+
+  function format(n) {
+    return new Intl.NumberFormat('en', {
+      notation: n >= 1000 ? 'compact' : 'standard',
+      maximumFractionDigits: 1
+    }).format(n);
+  }
+
+  function toast*
+
